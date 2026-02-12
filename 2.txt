@@ -1,0 +1,8 @@
+需求：输入1个数，数字小于10，则前面进行补0
+代码如下：
+<body>
+ <script>
+ let num = prompt('请输入一个数字：')
+num < 10 ? 0 + num : num
+</script>
+</body>

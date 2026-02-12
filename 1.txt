@@ -1,0 +1,18 @@
+转换时间
+代码如下：
+<body>
+  <script>
+     let second = +prompt('请输入秒数：')
+     function getTime(t){
+          h = parseInt(t / 60 / 60 % 24)
+          m = parseInt(t / 60 % 60)
+          s = parseInt(t % 60)
+          h = h < 10 ? '0' + h : h
+          m = m < 10 ? '0' + m : m
+          s = s < 10 ? '0' + s : s
+          return `${h}小时${m}分$(s)秒`
+     }
+     let str = getTime(second)
+     document.write(str)
+  </script>
+</body>
