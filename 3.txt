@@ -1,0 +1,26 @@
+猜数字
+代码如下：
+<body>
+<script>
+	function getRandom(N,M){
+	        return Math.floor(Math.random() * (M - N + 1 ) ) + N
+}
+	let random = getRandom( 1 , 10 )
+	let flag = true
+	for  (let i = 1; i <= 3; i++){
+		let num = +prompt('请输入 1 ~ 10 之间的一个数字：')
+		if ( num > random) {
+			alert('您猜大了 ，继续')
+	}		else if ( num > random ){
+			alert('您猜小了 ，继续')
+	}		else {
+			flag = false
+			alert('猜对了，真厉害')
+			break
+	}
+}
+	if (flag) {
+		alert('次数已经用完')
+}
+</script>
+</body>
