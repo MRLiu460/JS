@@ -1,0 +1,44 @@
+按钮筛选
+代码如下：
+ <style>
+    .box{
+      margin: 0 auto;
+      text-align: center;
+    }
+    div {
+      text-align: center;
+    }
+    .filters button.active {
+      background: #007bff;
+      color: white;
+    }
+  
+  </style>
+
+<body>
+  <h1 class="box">小卡片</h1>
+  <div class="filters">
+  <button class="active">全部</button>
+  <button>JavaScript</button>
+  <button>CSS</button>
+  <button>HTML</button>
+</div>
+<script>
+  // 1. 拿到所有按钮
+const buttons = document.querySelectorAll('.filters button')
+
+// 2. 给每个按钮绑定点击事件
+buttons.forEach(button => {
+  button.addEventListener('click', function() {
+    // 点谁，谁就亮，别人取消亮
+    buttons.forEach(btn => btn.classList.remove('active'))
+    this.classList.add('active')
+    
+    // 这里先打印一下，确认点击生效
+    console.log('当前筛选：', this.innerText)
+  })
+})
+</script>
+
+  
+</body>
