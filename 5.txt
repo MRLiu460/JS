@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>待办清单</title>
+  <style>
+    .container {
+      max-width: 400px;
+      margin: 50px auto;
+      padding: 20px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+    }
+    .todo-input {
+      width: 70%;
+      padding: 8px;
+      margin-right: 10px;
+    }
+    .add-btn {
+      padding: 8px 16px;
+      background: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .todo-list {
+      margin-top: 20px;
+      list-style: none;
+      padding: 0;
+    }
+    .todo-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px;
+      border-bottom: 1px solid #eee;
+    }
+    .delete-item {
+      background: #ff4444;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      padding: 4px 8px;
+      cursor: pointer;
+    }
+    .completed {
+      text-decoration: line-through;
+      color: #999;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1 class="box">我的待办</h1>
+    
+    <!-- 输入区域 -->
+    <div>
+      <input type="text" class="todo-input" placeholder="写点什么...">
+      <button class="add-btn">添加</button>
+    </div>
+    
+    <!-- 待办列表 -->
+    <ul class="todo-list">
+      <!-- 这里会动态添加待办项 -->
+    </ul>
+  </div>
+
+  <script>
+    // 1. 找到页面上的元素
+    const input = document.querySelector('.todo-input')
+    const addBtn = document.querySelector('.add-btn')
+    const todoList = document.querySelector('.todo-list')
+    
+    // 2. 添加待办的功能
+    addBtn.addEventListener('click', function() {
+      // 获取输入框的内容
+      const text = input.value
+      
+      // 如果没输入内容，就不添加
+      if (text === '') {
+        alert('请输入点什么')
+        return
+      }
+      
+      // 创建新的待办项
+      const li = document.createElement('li')
+      li.className = 'todo-item'
+      
+      // 设置待办项的内容
+      li.innerHTML = `
+        <span>${text}</span>
+        <button class="delete-item">删除</button>
+      `
+      
+      // 把待办项添加到列表中
+      todoList.appendChild(li)
+      
+      // 清空输入框
+      input.value = ''
+      
+      // 给这个新添加的删除按钮绑定功能
+      const deleteBtn = li.querySelector('.delete-item')
+      deleteBtn.addEventListener('click', function() {
+        li.remove()
+      })
+      
+      // 点击待办文字可以标记完成
+      const span = li.querySelector('span')
+      span.addEventListener('click', function() {
+        span.classList.toggle('completed')
+      })
+    })
+  </script>
+</body>
+</html>
