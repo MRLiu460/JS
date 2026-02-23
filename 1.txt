@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>名言生成器</title>
+  <style>
+    body {
+      font-family: system-ui, sans-serif;
+      background: #f0f2f5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+      padding: 20px;
+    }
+    
+    .card {
+      max-width: 500px;
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+    
+    h1 {
+      color: #1a1a1a;
+      margin-bottom: 30px;
+      font-size: 28px;
+    }
+    
+    .quote-box {
+      background: #f8f9fa;
+      padding: 30px;
+      border-radius: 8px;
+      margin: 20px 0;
+      min-height: 120px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .quote {
+      font-size: 20px;
+      line-height: 1.6;
+      color: #333;
+      font-style: italic;
+      margin: 0;
+      transition: opacity 0.3s;
+    }
+    
+    .author {
+      color: #666;
+      font-size: 16px;
+      margin-top: 10px;
+    }
+    
+    button {
+      background: #4CAF50;
+      color: white;
+      border: none;
+      padding: 12px 30px;
+      font-size: 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      margin: 10px 0;
+      transition: background 0.3s;
+    }
+    
+    button:hover {
+      background: #45a049;
+    }
+    
+    .favorites-btn {
+      background: #ffc107;
+      color: #333;
+      margin-left: 10px;
+    }
+    
+    .favorites-btn:hover {
+      background: #e0a800;
+    }
+    
+    .favorites-list {
+      margin-top: 30px;
+      text-align: left;
+      border-top: 1px solid #ddd;
+      padding-top: 20px;
+    }
+    
+    .favorites-list h3 {
+      color: #333;
+      margin-bottom: 10px;
+    }
+    
+    .favorite-item {
+      background: #f8f9fa;
+      padding: 10px;
+      margin: 5px 0;
+      border-radius: 4px;
+      font-size: 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .remove-fav {
+      background: #ff4444;
+      color: white;
+      border: none;
+      padding: 2px 8px;
+      border-radius: 3px;
+      cursor: pointer;
+      font-size: 12px;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>✨ 名言生成器</h1>
+    
+    <!-- 名言显示区域 -->
+    <div class="quote-box">
+      <div>
+        <p class="quote" id="quote">点击按钮获取名言</p>
+        <p class="author" id="author"></p>
+      </div>
+    </div>
+    
+    <!-- 按钮区域 -->
+    <div>
+      <button id="new-quote">随机名言</button>
+      <button id="favorite" class="favorites-btn">❤️ 收藏</button>
+    </div>
+    
+    <!-- 收藏列表 -->
+    <div class="favorites-list" id="favorites-list" style="display: none;">
+      <h3>我的收藏</h3>
+      <div id="favorites-container"></div>
+    </div>
+  </div>
+
+  <script>
+    // 名言数据
+    const quotes = [
+      { text: "生活就像一盒巧克力，你永远不知道下一颗是什么味道。", author: "阿甘正传" },
+      { text: "活着，就是不断面对那些不想面对的事。", author: "余华" },
+      { text: "世界上只有一种真正的英雄主义，那就是在认清生活真相之后依然热爱生活。", author: "罗曼·罗兰" },
+      { text: "要么旅行，要么读书，身体和灵魂必须有一个在路上。", author: "未知" },
+      { text: "种一棵树最好的时间是十年前，其次是现在。", author: "佚名" },
+      { text: "你的时间有限，不要浪费于重复他人的生活。", author: "史蒂夫·乔布斯" },
+      { text: "简单的事情重复做，你就是专家；重复的事情用心做，你就是赢家。", author: "佚名" },
+      { text: "人生最大的错误是不断担心会犯错。", author: "埃尔伯特·哈伯德" }
+    ]
+    
+    // 收藏数组
+    let favorites = []
+    
+    // 获取页面元素
+    const quoteEl = document.getElementById('quote')
+    const authorEl = document.getElementById('author')
+    const newQuoteBtn = document.getElementById('new-quote')
+    const favoriteBtn = document.getElementById('favorite')
+    const favoritesList = document.getElementById('favorites-list')
+    const favoritesContainer = document.getElementById('favorites-container')
+    
+    // 显示随机名言
+    function showRandomQuote() {
+      const randomIndex = Math.floor(Math.random() * quotes.length)
+      const quote = quotes[randomIndex]
+      quoteEl.textContent = `"${quote.text}"`
+      authorEl.textContent = `—— ${quote.author}`
+    }
+    
+    // 显示收藏列表
+    function showFavorites() {
+      if (favorites.length === 0) {
+        favoritesList.style.display = 'none'
+        return
+      }
+      
+      favoritesList.style.display = 'block'
+      favoritesContainer.innerHTML = ''
+      
+      favorites.forEach((fav, index) => {
+        const item = document.createElement('div')
+        item.className = 'favorite-item'
+        item.innerHTML = `
+          <span>"${fav.text}" —— ${fav.author}</span>
+          <button class="remove-fav" data-index="${index}">删除</button>
+        `
+        favoritesContainer.appendChild(item)
+      })
+      
+      // 给每个删除按钮绑定事件
+      document.querySelectorAll('.remove-fav').forEach(btn => {
+        btn.addEventListener('click', function() {
+          const index = this.getAttribute('data-index')
+          favorites.splice(index, 1)
+          showFavorites()
+        })
+      })
+    }
+    
+    // 新名言按钮点击
+    newQuoteBtn.addEventListener('click', showRandomQuote)
+    
+    // 收藏按钮点击
+    favoriteBtn.addEventListener('click', function() {
+      const currentQuote = quoteEl.textContent.replace(/^"|"$/g, '')  // 去掉引号
+      const currentAuthor = authorEl.textContent.replace('—— ', '')
+      
+      // 如果是默认状态，不收藏
+      if (currentQuote === '点击按钮获取名言') {
+        alert('请先生成名言')
+        return
+      }
+      
+      // 检查是否已经收藏过
+      const exists = favorites.some(fav => fav.text === currentQuote)
+      if (exists) {
+        alert('已经收藏过了')
+        return
+      }
+      
+      // 添加到收藏
+      favorites.push({
+        text: currentQuote,
+        author: currentAuthor
+      })
+      
+      showFavorites()
+    })
+    
+    // 页面加载时显示一条随机名言
+    showRandomQuote()
+  </script>
+</body>
+</html>
